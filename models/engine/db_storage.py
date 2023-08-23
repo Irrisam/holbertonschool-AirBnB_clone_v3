@@ -77,17 +77,17 @@ class DBStorage:
 
     def get(self, cls, id):
         if isinstance(cls, Base):
-            value = self.__session.query(cls).filter_by(id=id)
+            value = self.__session.query(cls).filter_by(id=id).first()
             if value is not None:
                 return value
             else:
-                return "None"
+                return None
 
     def count(self, cls=None):
         from sqlalchemy import func
-
+        query = self.session.query(func.count())
+        
         if cls is None:
-            counter = self.__session.query(func.count()).first()
-        else:
-            counter = self.__session.query(func.count()).filter(cls).first()
-        return counter
+           query = query.filter(cls)
+        counter = query.first()
+        return counter[0]
