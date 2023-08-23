@@ -70,23 +70,14 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        if isinstance(cls, str):
-            key = cls + '.' + id
-            return self.__objects.get(key, None)
-        else:
-            return None
+        all_obj = self.all(cls)
+        for obj in all_obj.values():
+            if id == obj.id:
+                return obj
+        return None
 
     def count(self, cls=None):
         if cls is None:
-            return len(self.__objects)
-        if isinstance(cls, str):
-            if cls in classes:
-                cls = classes.get(cls, None)
-            else:
-                return None
-        if issubclass(cls, BaseModel):
-            counter = sum(1 for obj in self.__objects.values() if
-                          isinstance(obj, cls))
-            return counter
+            return len(self.all())
         else:
-            return None
+            return len(self.all(cls))

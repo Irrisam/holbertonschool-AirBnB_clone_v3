@@ -76,18 +76,15 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
-        if isinstance(cls, Base):
-            value = self.__session.query(cls).filter_by(id=id).first()
-            if value is not None:
-                return value
-            else:
-                return None
+        all_obj = self.all(cls)
+        for obj in all_obj.values():
+            if id == obj.id:
+                return obj
+        return None
+
 
     def count(self, cls=None):
-        from sqlalchemy import func
-        query = self.session.query(func.count())
-        
         if cls is None:
-           query = query.filter(cls)
-        counter = query.first()
-        return counter[0]
+            return len(self.all())
+        else:
+            return len(self.all(cls))
