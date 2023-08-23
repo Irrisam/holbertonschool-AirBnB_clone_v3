@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""flaskapp api for flask"""
+"""A first api app"""
 
 from api.v1.views import app_views
 from flask import Flask, Blueprint
@@ -11,8 +11,8 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def teardown_storage(Exception):
-    """closes storage on error"""
+def teardown_storage(exception):
+    """closes the storage on teardown"""
     storage.close()
 
 
