@@ -10,6 +10,12 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 
 
+@app.errorhandler(404)
+def invalide_route(e):
+    """Returns a JSON if page not found"""
+    return jsonify({"error": "Not found"}), 404
+
+
 @app.teardown_appcontext
 def teardown_db(exception):
     """closes the storage on teardown"""
